@@ -25,23 +25,36 @@
         android:layout_marginStart="@dimen/std_space"
         android:layout_marginTop="@dimen/std_space"
         android:layout_marginBottom="8dp"
-        app:layout_constraintBottom_toBottomOf="@+id/address2"
+        app:layout_constraintBottom_toBottomOf="@+id/divider"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/arrival_code"
         tools:text="@string/address1_test" />
 
-    <TextView
-        android:id="@+id/address2"
-        android:layout_width="0dp"
-        android:layout_height="20dp"
-        android:layout_marginStart="@dimen/std_space"
-        android:text=""
+
+<!--    <TextView-->
+<!--        android:id="@+id/address2"-->
+<!--        android:layout_width="0dp"-->
+<!--        android:layout_height="20dp"-->
+<!--        android:layout_marginStart="@dimen/std_space"-->
+<!--        android:text=""-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="@id/address1"-->
+<!--        tools:text="@string/address2_test" />-->
+
+    <View
+        android:id="@+id/divider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="@dimen/std_space"
+        android:layout_marginBottom="@dimen/std_space"
+        android:background="?android:attr/listDivider"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/address1"
-        tools:text="@string/address2_test" />
+        app:layout_constraintTop_toBottomOf="@+id/address1" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -7,13 +7,13 @@
     <data>
         <variable
             name="shopListViewModel"
-            type="com.example.shopinstantsearch.ShopListViewModel" />
+            type="com.example.shopinstantsearch.searchmain.ShopListViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ShopListFragment"
+        tools:context=".searchmain.ShopListFragment"
         >
 
         <SearchView

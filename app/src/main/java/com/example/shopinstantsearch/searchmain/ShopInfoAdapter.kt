@@ -1,4 +1,4 @@
-package com.example.shopinstantsearch
+package com.example.shopinstantsearch.searchmain
 
 import android.view.LayoutInflater
 import android.view.View
@@ -7,10 +7,12 @@ import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.example.shopinstantsearch.R
 import com.example.shopinstantsearch.data.ShopInfo
+import java.lang.StringBuilder
 
 
-class ShopInfoDiffCallback : DiffUtil.ItemCallback<ShopInfo>() {
+class ShopListDiffCallback : DiffUtil.ItemCallback<ShopInfo>() {
     override fun areItemsTheSame(oldItem: ShopInfo, newItem: ShopInfo): Boolean {
        return oldItem.shopId == newItem.shopId
     }
@@ -20,7 +22,7 @@ class ShopInfoDiffCallback : DiffUtil.ItemCallback<ShopInfo>() {
     }
 }
 
-class ShopInfoAdapter: ListAdapter<ShopInfo,ShopInfoAdapter.ViewHolder>(ShopInfoDiffCallback()) {
+class ShopListAdapter: ListAdapter<ShopInfo, ShopListAdapter.ViewHolder>(ShopListDiffCallback()) {
 
     var data = listOf<ShopInfo>()
         set(value) {
@@ -28,8 +30,7 @@ class ShopInfoAdapter: ListAdapter<ShopInfo,ShopInfoAdapter.ViewHolder>(ShopInfo
             notifyDataSetChanged()
         }
 
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ShopInfoAdapter.ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ShopListAdapter.ViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
         val view = layoutInflater.inflate(R.layout.list_item_shop_info,parent,false)
 
@@ -38,16 +39,20 @@ class ShopInfoAdapter: ListAdapter<ShopInfo,ShopInfoAdapter.ViewHolder>(ShopInfo
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = getItem(position)
+        val sb = StringBuilder()
 
         holder.arrivalCode.text = item.shopCode
-        holder.address1.text = item.address1
-        holder.address2.text = item.address2
+
+        sb.append(item.address1)
+        sb.append("　")
+        sb.append(item.address2)
+
+        holder.address1.text =  sb.toString()
     }
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val arrivalCode: TextView = itemView.findViewById(R.id.arrival_code)
         val address1: TextView = itemView.findViewById(R.id.address1)
-        val address2: TextView = itemView.findViewById(R.id.address2)
     }
 
 }

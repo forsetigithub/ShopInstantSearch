@@ -6,6 +6,6 @@
 
     <fragment
         android:id="@+id/shopListFragment"
-        android:name="com.example.shopinstantsearch.ShopListFragment"
+        android:name="com.example.shopinstantsearch.searchmain.ShopListFragment"
         android:label="ShopListFragment" />
 </navigation>
