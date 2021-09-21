@@ -14,7 +14,6 @@ import com.example.shopinstantsearch.databinding.FragmentShopSearchMainBinding
 
 
 class ShopListFragment : Fragment() {
-    val TAG_NAME = "ShopListFragment"
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -27,8 +26,7 @@ class ShopListFragment : Fragment() {
 
         val application = requireNotNull(this.activity).application
 
-        val dataSource = ShopDatabase.getInstance(application).shopDatabaseDao
-        val viewModelFactory = ShopListViewModelFactory(dataSource, application)
+        val viewModelFactory = ShopListViewModelFactory(application)
 
         val shopListViewModel =
             ViewModelProvider(this,viewModelFactory).get(ShopListViewModel::class.java)
@@ -41,7 +39,7 @@ class ShopListFragment : Fragment() {
 
         binding.shopList.adapter = adapter
 
-        shopListViewModel.addresses.observe(viewLifecycleOwner, Observer {
+        shopListViewModel.shops.observe(viewLifecycleOwner, Observer {
             it?.let {
                 adapter.submitList(it)
             }

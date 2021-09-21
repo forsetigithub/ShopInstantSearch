@@ -1,48 +1,40 @@
 package com.example.shopinstantsearch.searchmain
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.example.shopinstantsearch.api.ShopApi
+import com.example.shopinstantsearch.data.ShopDatabase
 import com.example.shopinstantsearch.data.ShopDatabaseDao
 import com.example.shopinstantsearch.data.ShopInfo
+import com.example.shopinstantsearch.repository.ShopRepository
 import kotlinx.coroutines.launch
+import java.lang.Exception
 
 class ShopListViewModel(
-    datasource: ShopDatabaseDao,
     application: Application
 ) : ViewModel() {
 
-    private val database = datasource
+    private val shopRepository = ShopRepository(ShopDatabase.getInstance(application))
 
-    val addresses = database.getAllShops()
+    val shops = shopRepository.shops
 
     init {
-
-       viewModelScope.launch {
-           clear()
-           insert(ShopInfo(shopCode = "01",address1 = "福岡県福岡市",address2 = "南区向野"))
-           insert(ShopInfo(shopCode = "02",address1 = "福岡県久留米市",address2 = "東町"))
-           insert(ShopInfo(shopCode = "03",address1 = "北海道札幌市",address2 = "中央区北二十二条西"))
-
-       }
-
+        getShops()
     }
 
-    private suspend fun insert(shop: ShopInfo) {
-        database.insert(shop)
+    private fun getShops() {
+        viewModelScope.launch {
+            try {
+                shopRepository.refreshShops()
+            }catch (e: Exception) {
+                Log.e("ShopListViewModel",e.message.toString())
+            }
+        }
     }
-
-    private suspend fun update(shop: ShopInfo) {
-        database.update(shop)
-    }
-
-    private suspend fun clear() {
-        database.clear()
-    }
-
-
-
 
 
 }
