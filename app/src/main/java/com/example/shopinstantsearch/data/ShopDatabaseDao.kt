@@ -7,7 +7,7 @@ import androidx.room.*
 interface ShopDatabaseDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insert(shop: ShopInfo)
+    suspend fun insertAll(shops: List<ShopInfo>)
 
     @Update
     suspend fun update(shop: ShopInfo)

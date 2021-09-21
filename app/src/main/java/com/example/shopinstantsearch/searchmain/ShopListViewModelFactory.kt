@@ -7,7 +7,6 @@ import com.example.shopinstantsearch.data.ShopDatabase
 import com.example.shopinstantsearch.data.ShopDatabaseDao
 
 class ShopListViewModelFactory(
-    private val dataSource: ShopDatabaseDao,
     private val application: Application
 
 ) : ViewModelProvider.Factory {
@@ -15,7 +14,7 @@ class ShopListViewModelFactory(
     @Suppress("unchecked_cast")
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
       if(modelClass.isAssignableFrom(ShopListViewModel::class.java)) {
-          return ShopListViewModel(dataSource,application) as T
+          return ShopListViewModel(application) as T
       }
         throw IllegalArgumentException("Unknown ViewModel class")
     }
