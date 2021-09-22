@@ -17,7 +17,7 @@ data class ShopInfo (
     var address1: String = "",
 
     @ColumnInfo(name = "address2")
-    var address2: String = ""
+    var address2: String = "",
 )
 
 fun List<ShopInfo>.asDomainModel(): List<ShopInfo> {

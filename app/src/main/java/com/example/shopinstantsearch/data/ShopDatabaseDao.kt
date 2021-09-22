@@ -1,6 +1,7 @@
 package com.example.shopinstantsearch.data
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.room.*
 
 @Dao
@@ -20,4 +21,8 @@ interface ShopDatabaseDao {
 
     @Query("SELECT * FROM shop_info_table ORDER BY shopId")
     fun getAllShops(): LiveData<List<ShopInfo>>
+
+    @Query("SELECT * FROM shop_info_table WHERE address1 = :query")
+    fun search(query: String?) : LiveData<List<ShopInfo>>
+
 }

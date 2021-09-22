@@ -27,8 +27,8 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:shops="@{shopListViewModel.shops}"
-            />
+            app:shops="@{shopListViewModel.shops}" />
+
 
         <SearchView
             android:id="@+id/address_search_view"
