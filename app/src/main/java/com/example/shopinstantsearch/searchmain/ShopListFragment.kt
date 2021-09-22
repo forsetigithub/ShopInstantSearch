@@ -76,7 +76,7 @@ class ShopListFragment : Fragment(),CoroutineScope {
         launch {
             @OptIn(ExperimentalCoroutinesApi::class)
             binding.addressSearchView.getQueryTextChangeStateFlow()
-                .debounce(700)
+                .debounce(800)
                 .filter { query ->
                     return@filter query.isNotEmpty()
                 }
@@ -104,7 +104,7 @@ class ShopListFragment : Fragment(),CoroutineScope {
 
     private fun getDataFromText(query: String): Flow<String> {
         return flow {
-            kotlinx.coroutines.delay(500)
+            kotlinx.coroutines.delay(700)
             emit(query)
         }
     }

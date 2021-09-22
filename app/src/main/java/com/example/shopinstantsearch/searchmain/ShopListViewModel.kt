@@ -13,6 +13,8 @@ class ShopListViewModel @ViewModelInject constructor (
     private val shopRepository: ShopRepository
 ) : ViewModel() {
 
+    //TODO デバイス回転時の対応
+//    val shop_list:LiveData<List<ShopInfo>> = getQueryShops(query)
 
     init {
         getShops()
