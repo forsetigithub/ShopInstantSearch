@@ -1,41 +1,37 @@
 package com.example.shopinstantsearch.repository
 
-import android.util.Log
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
+import androidx.lifecycle.asLiveData
 import com.example.shopinstantsearch.api.ShopApi
-import com.example.shopinstantsearch.data.ShopDatabase
+import com.example.shopinstantsearch.data.ShopDatabaseDao
 import com.example.shopinstantsearch.data.ShopInfo
 import com.example.shopinstantsearch.data.asDomainModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
 interface SearchApi {
-    suspend fun performSearch(query: String) : LiveData<List<ShopInfo>>
+    fun performSearch(query: String) : Flow<List<ShopInfo>>
 }
 
-class ShopRepository(private val database: ShopDatabase) : SearchApi {
+class ShopRepository @Inject constructor (private val shopDao: ShopDatabaseDao) : SearchApi {
 
     val shops: LiveData<List<ShopInfo>> =
-        Transformations.map(database.shopDatabaseDao.getAllShops()) {
+        Transformations.map(shopDao.getAllShops().asLiveData()) {
             it.asDomainModel()
         }
 
     suspend fun refreshShops() {
         withContext(Dispatchers.IO) {
             val shops = ShopApi.retrofitService.getShops()
-            database.shopDatabaseDao.insertAll(shops)
+            shopDao.insertAll(shops)
         }
     }
 
-    override suspend fun performSearch(query: String) : LiveData<List<ShopInfo>> {
-
-        val result = database.shopDatabaseDao.search(query)
-
-        Log.i("performSearch",result.value?.size.toString())
-        return result
+    override fun performSearch(query: String) : Flow<List<ShopInfo>> {
+        return shopDao.search("%$query%")
     }
-
-
 }

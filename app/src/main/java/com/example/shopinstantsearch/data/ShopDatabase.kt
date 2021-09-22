@@ -4,32 +4,34 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import dagger.Module
+import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.android.components.ApplicationComponent
+import dagger.hilt.android.qualifiers.ApplicationContext
+import javax.inject.Singleton
 
 @Database(entities = [ShopInfo::class], version = 1, exportSchema = false)
 abstract class ShopDatabase : RoomDatabase() {
 
-    abstract val shopDatabaseDao: ShopDatabaseDao
+    abstract fun shopDatabaseDao() : ShopDatabaseDao
 
-    companion object {
-        @Volatile
-        private var INSTANCE: ShopDatabase? = null
+}
 
-        fun getInstance(context: Context): ShopDatabase {
-            synchronized(this) {
-                var instance = INSTANCE
+@Module
+@InstallIn(ApplicationComponent::class)
+object DatabaseModule {
+    @Singleton
+    @Provides
+    fun provideDatabase(
+        @ApplicationContext context: Context
+    ) = Room.databaseBuilder(
+        context,
+        ShopDatabase::class.java,
+        "shop_database"
+    ).build()
 
-                if(instance == null) {
-                    instance = Room.databaseBuilder(
-                        context.applicationContext,
-                        ShopDatabase::class.java,
-                        "shop_database"
-                    ).fallbackToDestructiveMigration().build()
-
-                    INSTANCE = instance
-                }
-
-                return instance
-            }
-        }
-    }
+    @Singleton
+    @Provides
+    fun provideDao(database: ShopDatabase) = database.shopDatabaseDao()
 }
