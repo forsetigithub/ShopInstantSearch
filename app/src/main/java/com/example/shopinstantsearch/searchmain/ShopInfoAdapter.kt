@@ -24,12 +24,12 @@ class ShopListDiffCallback : DiffUtil.ItemCallback<ShopInfo>() {
 class ShopListAdapter: ListAdapter<ShopInfo, ShopListAdapter.ViewHolder>(ShopListDiffCallback()) {
 
     var data = listOf<ShopInfo>()
-        set(value) {
-            field = value
-            notifyDataSetChanged()
-        }
+//        set(value) {
+//            field = value
+//            notifyDataSetChanged()
+//        }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ShopListAdapter.ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
         val view = layoutInflater.inflate(R.layout.list_item_shop_info,parent,false)
 

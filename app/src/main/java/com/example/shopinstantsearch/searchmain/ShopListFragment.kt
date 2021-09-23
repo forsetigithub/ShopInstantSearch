@@ -33,7 +33,7 @@ class ShopListFragment : Fragment(),CoroutineScope {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
 
         binding = DataBindingUtil.inflate(
             inflater, R.layout.fragment_shop_search_main,container,false)
@@ -55,14 +55,13 @@ class ShopListFragment : Fragment(),CoroutineScope {
 
         job = Job()
 
-//        binding.shopListViewModel?.getQueryShops(binding.addressSearchView.query.toString())?.observe(this@ShopListFragment.viewLifecycleOwner,{ list ->
-//            list?.let {
-//
-//                Log.i("setupSearchStateFlow",binding.addressSearchView.query.toString())
-//                adapter.submitList(it)
-//                binding.loadingSpinner.visibility = ProgressBar.INVISIBLE
-//            }
-//        })
+        binding.shopListViewModel?.shopList?.observe(this@ShopListFragment.viewLifecycleOwner,
+            { list -> list?.let {
+                Log.i("setupSearchStateFlow",binding.shopListViewModel?.shopList?.value?.size.toString())
+                adapter.submitList(it)
+                binding.loadingSpinner.visibility = ProgressBar.INVISIBLE
+            }
+        })
 
         setupSearchStateFlow()
 
@@ -71,7 +70,7 @@ class ShopListFragment : Fragment(),CoroutineScope {
         return binding.root
     }
 
-    @OptIn(kotlinx.coroutines.FlowPreview::class)
+    @OptIn(FlowPreview::class)
     private fun setupSearchStateFlow() {
         launch {
             @OptIn(ExperimentalCoroutinesApi::class)
@@ -90,24 +89,16 @@ class ShopListFragment : Fragment(),CoroutineScope {
                 .flowOn(Dispatchers.Default)
                 .collect { result ->
                     binding.loadingSpinner.visibility = ProgressBar.VISIBLE
-
-                    binding.shopListViewModel?.getQueryShops(result)?.observe(this@ShopListFragment.viewLifecycleOwner,{ list ->
-                        list?.let {
-                            Log.i("setupSearchStateFlow",it.size.toString())
-                            adapter.submitList(it)
-                            binding.loadingSpinner.visibility = ProgressBar.INVISIBLE
-                        }
-                    })
+                    binding.shopListViewModel?.getShopList(result)
+                    binding.loadingSpinner.visibility = ProgressBar.INVISIBLE
                 }
+            }
         }
-    }
 
     private fun getDataFromText(query: String): Flow<String> {
         return flow {
-            kotlinx.coroutines.delay(700)
+            delay(700)
             emit(query)
         }
     }
-
-
 }

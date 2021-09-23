@@ -19,13 +19,3 @@ data class ShopInfo (
     var address2: String = "",
 )
 
-fun List<ShopInfo>.asDomainModel(): List<ShopInfo> {
-    return map {
-        ShopInfo(
-            shopId = it.shopId,
-            shopCode = it.shopCode,
-            address1 = it.address1,
-            address2 = it.address2
-        )
-    }
-}
