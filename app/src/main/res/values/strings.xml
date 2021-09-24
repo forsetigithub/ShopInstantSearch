@@ -1,3 +1,4 @@
 <resources>
-    <string name="app_name">ShopInstantSearch</string>
+    <string name="app_name">店着コード検索</string>
+    <string name="search_view_query_hint">検索</string>
 </resources>

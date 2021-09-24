@@ -15,8 +15,13 @@ class ShopListViewModel @ViewModelInject constructor (
     val shopFilterQuery: MutableLiveData<String> = MutableLiveData()
 
     val shopList: LiveData<List<ShopInfo>> = Transformations.switchMap(shopFilterQuery) {
-        param -> shopRepository.performSearch(param)
+        param ->
+            shopRepository.performSearch(param)
     }
+
+    private val _shops = MutableLiveData<List<ShopInfo>>()
+    val shops: LiveData<List<ShopInfo>>
+        get() = _shops
 
     fun getShopList(query: String) {
         shopFilterQuery.value = query
@@ -30,6 +35,8 @@ class ShopListViewModel @ViewModelInject constructor (
         viewModelScope.launch {
             try {
                 shopRepository.refreshShops()
+                _shops.postValue(shopRepository.getAllShop().value)
+
             }catch (e: Exception) {
                 Log.e("ShopListViewModel",e.stackTraceToString())
             }
