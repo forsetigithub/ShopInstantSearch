@@ -3,6 +3,7 @@ package com.example.shopinstantsearch.data
 import androidx.lifecycle.LiveData
 import androidx.room.*
 
+
 @Dao
 interface ShopDatabaseDao {
 
@@ -21,7 +22,7 @@ interface ShopDatabaseDao {
     @Query("SELECT * FROM shop_info_table ORDER BY shopId")
     fun getAllShops(): LiveData<List<ShopInfo>>
 
-    @Query("SELECT * FROM shop_info_table WHERE address1 LIKE :query")
+    @Query("SELECT * FROM shop_info_table WHERE `trim`(`replace`(`replace`(address1,'　',''),' ','')) || `trim`(`replace`(`replace`(address2,'　',''),' ','')) LIKE :query")
     fun search(query: String) : LiveData<List<ShopInfo>>
 
 }

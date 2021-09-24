@@ -57,9 +57,7 @@ class ShopListFragment : Fragment(),CoroutineScope {
 
         binding.shopListViewModel?.shopList?.observe(this@ShopListFragment.viewLifecycleOwner,
             { list -> list?.let {
-                Log.i("setupSearchStateFlow",binding.shopListViewModel?.shopList?.value?.size.toString())
                 adapter.submitList(it)
-                binding.loadingSpinner.visibility = ProgressBar.INVISIBLE
             }
         })
 
@@ -74,33 +72,21 @@ class ShopListFragment : Fragment(),CoroutineScope {
     private fun setupSearchStateFlow() {
         launch {
             @OptIn(ExperimentalCoroutinesApi::class)
+
             binding.addressSearchView.getQueryTextChangeStateFlow()
-                .debounce(800)
+                .debounce(300)
                 .filter { query ->
                     return@filter query.isNotEmpty()
                 }
                 .distinctUntilChanged()
-                .flatMapLatest { query ->
-                    getDataFromText(query)
-                        .catch {
-                            emitAll(flowOf(""))
-                        }
-                }
                 .flowOn(Dispatchers.Default)
                 .collect { result ->
                     binding.loadingSpinner.visibility = ProgressBar.VISIBLE
-
+Log.i("setupSearchStateFlow#result=",result)
                     binding.shopListViewModel?.getShopList(result)
 
                     binding.loadingSpinner.visibility = ProgressBar.INVISIBLE
                 }
             }
         }
-
-    private fun getDataFromText(query: String): Flow<String> {
-        return flow {
-            delay(700)
-            emit(query)
-        }
-    }
 }

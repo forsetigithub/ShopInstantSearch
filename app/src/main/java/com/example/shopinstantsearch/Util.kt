@@ -10,12 +10,12 @@ fun SearchView.getQueryTextChangeStateFlow(): StateFlow<String> {
     val query = MutableStateFlow("")
 
     setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-        override fun onQueryTextSubmit(p0: String): Boolean {
+        override fun onQueryTextSubmit(newText: String): Boolean {
             return false
         }
 
-        override fun onQueryTextChange(p0: String): Boolean {
-            query.value = p0
+        override fun onQueryTextChange(newText: String): Boolean {
+            query.value = newText
             return false
         }
     })
