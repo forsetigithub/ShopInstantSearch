@@ -1,5 +1,6 @@
 package com.example.shopinstantsearch.repository
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import com.example.shopinstantsearch.api.ShopApi
 import com.example.shopinstantsearch.data.ShopDatabaseDao
@@ -19,6 +20,10 @@ class ShopRepository @Inject constructor (private val shopDao: ShopDatabaseDao) 
             val shops = ShopApi.retrofitService.getShops()
             shopDao.insertAll(shops)
         }
+    }
+
+    fun getAllShop() : LiveData<List<ShopInfo>> {
+        return shopDao.getAllShops()
     }
 
     override fun performSearch(query: String) : LiveData<List<ShopInfo>> {

@@ -12,10 +12,16 @@ class ShopListViewModel @ViewModelInject constructor (
     private val shopRepository: ShopRepository
 ) : ViewModel() {
 
-    private val shopFilterQuery: MutableLiveData<String> = MutableLiveData()
+    val shopFilterQuery: MutableLiveData<String> = MutableLiveData()
 
+    //TODO DBからではなく、shopsから抽出するように変更
     val shopList: LiveData<List<ShopInfo>> = Transformations.switchMap(shopFilterQuery) {
-        param -> shopRepository.performSearch(param)
+        param ->
+            shopRepository.performSearch(param)
+    }
+
+    val shops: LiveData<List<ShopInfo>> by lazy {
+        shopRepository.getAllShop()
     }
 
     fun getShopList(query: String) {
@@ -23,13 +29,14 @@ class ShopListViewModel @ViewModelInject constructor (
     }
 
     init {
-        getShops()
+//        getShops()
     }
 
     private fun getShops() {
         viewModelScope.launch {
             try {
                 shopRepository.refreshShops()
+
             }catch (e: Exception) {
                 Log.e("ShopListViewModel",e.stackTraceToString())
             }

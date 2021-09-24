@@ -1,34 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:background="@drawable/shape_style"
+    android:layout_marginTop="@dimen/std_space"
+    android:layout_marginStart="@dimen/std_space"
+    android:layout_marginEnd="@dimen/std_space"
+    android:paddingTop="@dimen/std_space"
+    android:paddingBottom="@dimen/std_space"
+    android:paddingStart="@dimen/std_space"
+    android:paddingEnd="@dimen/std_space"
+    android:orientation="vertical">
 
 
     <TextView
         android:id="@+id/arrival_code"
-        android:layout_width="0dp"
-        android:layout_height="40dp"
-        android:layout_marginStart="@dimen/std_space"
-        android:layout_marginBottom="@dimen/std_space"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:text="@string/shopname_test"
-        app:layout_constraintBottom_toBottomOf="@id/address1"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        />
 
     <TextView
         android:id="@+id/address1"
-        android:layout_width="0dp"
-        android:layout_height="20dp"
-        android:layout_marginStart="@dimen/std_space"
-        android:layout_marginTop="@dimen/std_space"
-        android:layout_marginBottom="8dp"
-        app:layout_constraintBottom_toBottomOf="@+id/divider"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/arrival_code"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
         tools:text="@string/address1_test" />
 
 
@@ -44,17 +45,5 @@
 <!--        app:layout_constraintTop_toTopOf="@id/address1"-->
 <!--        tools:text="@string/address2_test" />-->
 
-    <View
-        android:id="@+id/divider"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginTop="@dimen/std_space"
-        android:layout_marginBottom="@dimen/std_space"
-        android:background="?android:attr/listDivider"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/address1" />
 
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

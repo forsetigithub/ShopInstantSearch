@@ -38,8 +38,6 @@ class ShopListFragment : Fragment(),CoroutineScope {
         binding = DataBindingUtil.inflate(
             inflater, R.layout.fragment_shop_search_main,container,false)
 
-        binding.loadingSpinner.visibility = ProgressBar.VISIBLE
-
         val application = requireNotNull(this.activity).application
 
         val viewModelFactory =
@@ -61,9 +59,14 @@ class ShopListFragment : Fragment(),CoroutineScope {
             }
         })
 
-        setupSearchStateFlow()
+//        binding.shopListViewModel?.shops?.observe(viewLifecycleOwner,
+//            { list -> list?.let {
+//Log.i("onCreateView#shops",it.size.toString())
+//                adapter.submitList(it)
+//            }
+//        })
 
-        binding.loadingSpinner.visibility = ProgressBar.INVISIBLE
+        setupSearchStateFlow()
 
         return binding.root
     }
@@ -81,11 +84,9 @@ class ShopListFragment : Fragment(),CoroutineScope {
                 .distinctUntilChanged()
                 .flowOn(Dispatchers.Default)
                 .collect { result ->
-                    binding.loadingSpinner.visibility = ProgressBar.VISIBLE
+
 Log.i("setupSearchStateFlow#result=",result)
                     binding.shopListViewModel?.getShopList(result)
-
-                    binding.loadingSpinner.visibility = ProgressBar.INVISIBLE
                 }
             }
         }
