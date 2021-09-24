@@ -1,9 +1,11 @@
 package com.example.shopinstantsearch.searchmain
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -54,4 +56,13 @@ class ShopListAdapter: ListAdapter<ShopInfo, ShopListAdapter.ViewHolder>(ShopLis
         val address1: TextView = itemView.findViewById(R.id.address1)
     }
 
+}
+
+@BindingAdapter("shops","queryString")
+fun hideProgressBar(view: View, shops: Any?,queryString: Any?) {
+    view.visibility = if (shops != null) View.GONE else View.VISIBLE
+
+    if(queryString == null) {
+        view.visibility = View.GONE
+    }
 }

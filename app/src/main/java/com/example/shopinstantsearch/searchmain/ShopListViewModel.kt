@@ -12,7 +12,7 @@ class ShopListViewModel @ViewModelInject constructor (
     private val shopRepository: ShopRepository
 ) : ViewModel() {
 
-    private val shopFilterQuery: MutableLiveData<String> = MutableLiveData()
+    val shopFilterQuery: MutableLiveData<String> = MutableLiveData()
 
     val shopList: LiveData<List<ShopInfo>> = Transformations.switchMap(shopFilterQuery) {
         param -> shopRepository.performSearch(param)
