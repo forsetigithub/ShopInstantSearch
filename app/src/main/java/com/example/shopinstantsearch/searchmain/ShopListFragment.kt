@@ -59,6 +59,13 @@ class ShopListFragment : Fragment(),CoroutineScope {
             }
         })
 
+//        binding.shopListViewModel?.shops?.observe(viewLifecycleOwner,
+//            { list -> list?.let {
+//Log.i("onCreateView#shops",it.size.toString())
+//                adapter.submitList(it)
+//            }
+//        })
+
         setupSearchStateFlow()
 
         return binding.root

@@ -58,11 +58,8 @@ class ShopListAdapter: ListAdapter<ShopInfo, ShopListAdapter.ViewHolder>(ShopLis
 
 }
 
-@BindingAdapter("shops","queryString")
-fun hideProgressBar(view: View, shops: Any?,queryString: Any?) {
+@BindingAdapter("shops")
+fun hideProgressBar(view: View, shops: Any?) {
     view.visibility = if (shops != null) View.GONE else View.VISIBLE
 
-    if(queryString == null) {
-        view.visibility = View.GONE
-    }
 }
