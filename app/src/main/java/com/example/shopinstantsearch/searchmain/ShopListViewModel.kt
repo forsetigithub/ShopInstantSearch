@@ -1,26 +1,26 @@
 package com.example.shopinstantsearch.searchmain
 
-import android.app.Application
+
 import android.util.Log
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewModelScope
-import com.example.shopinstantsearch.api.ShopApi
-import com.example.shopinstantsearch.data.ShopDatabase
-import com.example.shopinstantsearch.data.ShopDatabaseDao
+import androidx.hilt.lifecycle.ViewModelInject
+import androidx.lifecycle.*
 import com.example.shopinstantsearch.data.ShopInfo
 import com.example.shopinstantsearch.repository.ShopRepository
 import kotlinx.coroutines.launch
-import java.lang.Exception
 
-class ShopListViewModel(
-    application: Application
+class ShopListViewModel @ViewModelInject constructor (
+    private val shopRepository: ShopRepository
 ) : ViewModel() {
 
-    private val shopRepository = ShopRepository(ShopDatabase.getInstance(application))
+    private val shopFilterQuery: MutableLiveData<String> = MutableLiveData()
 
-    val shops = shopRepository.shops
+    val shopList: LiveData<List<ShopInfo>> = Transformations.switchMap(shopFilterQuery) {
+        param -> shopRepository.performSearch(param)
+    }
+
+    fun getShopList(query: String) {
+        shopFilterQuery.value = query
+    }
 
     init {
         getShops()
@@ -31,10 +31,8 @@ class ShopListViewModel(
             try {
                 shopRepository.refreshShops()
             }catch (e: Exception) {
-                Log.e("ShopListViewModel",e.message.toString())
+                Log.e("ShopListViewModel",e.stackTraceToString())
             }
         }
     }
-
-
 }

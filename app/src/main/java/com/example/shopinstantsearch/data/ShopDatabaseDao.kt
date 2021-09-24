@@ -20,4 +20,8 @@ interface ShopDatabaseDao {
 
     @Query("SELECT * FROM shop_info_table ORDER BY shopId")
     fun getAllShops(): LiveData<List<ShopInfo>>
+
+    @Query("SELECT * FROM shop_info_table WHERE address1 LIKE :query")
+    fun search(query: String) : LiveData<List<ShopInfo>>
+
 }

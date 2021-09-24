@@ -4,13 +4,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.shopinstantsearch.R
 import com.example.shopinstantsearch.data.ShopInfo
-import java.lang.StringBuilder
 
 
 class ShopListDiffCallback : DiffUtil.ItemCallback<ShopInfo>() {
@@ -26,12 +24,12 @@ class ShopListDiffCallback : DiffUtil.ItemCallback<ShopInfo>() {
 class ShopListAdapter: ListAdapter<ShopInfo, ShopListAdapter.ViewHolder>(ShopListDiffCallback()) {
 
     var data = listOf<ShopInfo>()
-        set(value) {
-            field = value
-            notifyDataSetChanged()
-        }
+//        set(value) {
+//            field = value
+//            notifyDataSetChanged()
+//        }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ShopListAdapter.ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
         val view = layoutInflater.inflate(R.layout.list_item_shop_info,parent,false)
 
@@ -56,9 +54,4 @@ class ShopListAdapter: ListAdapter<ShopInfo, ShopListAdapter.ViewHolder>(ShopLis
         val address1: TextView = itemView.findViewById(R.id.address1)
     }
 
-}
-
-@BindingAdapter("shops")
-fun hideIfLoadingData(view: View,shops: Any?) {
-    view.visibility = if (shops != null) View.GONE else View.VISIBLE
 }

@@ -1,23 +1,27 @@
 package com.example.shopinstantsearch.repository
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.Transformations
 import com.example.shopinstantsearch.api.ShopApi
-import com.example.shopinstantsearch.data.ShopDatabase
+import com.example.shopinstantsearch.data.ShopDatabaseDao
 import com.example.shopinstantsearch.data.ShopInfo
-import com.example.shopinstantsearch.data.asDomainModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
-class ShopRepository(private val database: ShopDatabase) {
+interface SearchApi {
+    fun performSearch(query: String) : LiveData<List<ShopInfo>>
+}
 
-    val shops: LiveData<List<ShopInfo>> = Transformations.map(database.shopDatabaseDao.getAllShops()) {
-        it.asDomainModel()
-    }
+class ShopRepository @Inject constructor (private val shopDao: ShopDatabaseDao) : SearchApi {
+
     suspend fun refreshShops() {
         withContext(Dispatchers.IO) {
             val shops = ShopApi.retrofitService.getShops()
-            database.shopDatabaseDao.insertAll(shops)
+            shopDao.insertAll(shops)
         }
+    }
+
+    override fun performSearch(query: String) : LiveData<List<ShopInfo>> {
+        return shopDao.search("%$query%")
     }
 }

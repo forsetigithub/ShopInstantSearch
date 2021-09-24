@@ -1,32 +1,49 @@
 package com.example.shopinstantsearch.searchmain
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ProgressBar
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.shopinstantsearch.R
-import com.example.shopinstantsearch.data.ShopDatabase
+import com.example.shopinstantsearch.data.DatabaseModule
 import com.example.shopinstantsearch.databinding.FragmentShopSearchMainBinding
+import com.example.shopinstantsearch.getQueryTextChangeStateFlow
+import com.example.shopinstantsearch.repository.ShopRepository
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.*
+import kotlin.coroutines.CoroutineContext
 
 
-class ShopListFragment : Fragment() {
+class ShopListFragment : Fragment(),CoroutineScope {
+
+    private lateinit var job: Job
+    private lateinit var binding: FragmentShopSearchMainBinding
+    private val adapter:ShopListAdapter by lazy { ShopListAdapter() }
+
+    override val coroutineContext: CoroutineContext
+        get() = Dispatchers.Main + job
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
 
-        val binding: FragmentShopSearchMainBinding = DataBindingUtil.inflate(
+        binding = DataBindingUtil.inflate(
             inflater, R.layout.fragment_shop_search_main,container,false)
+
+        binding.loadingSpinner.visibility = ProgressBar.VISIBLE
 
         val application = requireNotNull(this.activity).application
 
-        val viewModelFactory = ShopListViewModelFactory(application)
+        val viewModelFactory =
+            ShopListViewModelFactory(ShopRepository(DatabaseModule.provideDao(DatabaseModule.provideDatabase(application))))
 
         val shopListViewModel =
             ViewModelProvider(this,viewModelFactory).get(ShopListViewModel::class.java)
@@ -34,17 +51,56 @@ class ShopListFragment : Fragment() {
         binding.shopListViewModel = shopListViewModel
         binding.lifecycleOwner = this
 
-
-        val adapter = ShopListAdapter()
-
         binding.shopList.adapter = adapter
 
-        shopListViewModel.shops.observe(viewLifecycleOwner, Observer {
-            it?.let {
+        job = Job()
+
+        binding.shopListViewModel?.shopList?.observe(this@ShopListFragment.viewLifecycleOwner,
+            { list -> list?.let {
+                Log.i("setupSearchStateFlow",binding.shopListViewModel?.shopList?.value?.size.toString())
                 adapter.submitList(it)
+                binding.loadingSpinner.visibility = ProgressBar.INVISIBLE
             }
         })
 
+        setupSearchStateFlow()
+
+        binding.loadingSpinner.visibility = ProgressBar.INVISIBLE
+
         return binding.root
+    }
+
+    @OptIn(FlowPreview::class)
+    private fun setupSearchStateFlow() {
+        launch {
+            @OptIn(ExperimentalCoroutinesApi::class)
+            binding.addressSearchView.getQueryTextChangeStateFlow()
+                .debounce(800)
+                .filter { query ->
+                    return@filter query.isNotEmpty()
+                }
+                .distinctUntilChanged()
+                .flatMapLatest { query ->
+                    getDataFromText(query)
+                        .catch {
+                            emitAll(flowOf(""))
+                        }
+                }
+                .flowOn(Dispatchers.Default)
+                .collect { result ->
+                    binding.loadingSpinner.visibility = ProgressBar.VISIBLE
+
+                    binding.shopListViewModel?.getShopList(result)
+
+                    binding.loadingSpinner.visibility = ProgressBar.INVISIBLE
+                }
+            }
+        }
+
+    private fun getDataFromText(query: String): Flow<String> {
+        return flow {
+            delay(700)
+            emit(query)
+        }
     }
 }
