@@ -89,7 +89,9 @@ class ShopListFragment : Fragment(),CoroutineScope {
                 .flowOn(Dispatchers.Default)
                 .collect { result ->
                     binding.loadingSpinner.visibility = ProgressBar.VISIBLE
+
                     binding.shopListViewModel?.getShopList(result)
+
                     binding.loadingSpinner.visibility = ProgressBar.INVISIBLE
                 }
             }
