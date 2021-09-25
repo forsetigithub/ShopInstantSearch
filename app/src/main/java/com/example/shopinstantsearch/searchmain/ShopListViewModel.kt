@@ -29,7 +29,7 @@ class ShopListViewModel @ViewModelInject constructor (
     }
 
     init {
-//        getShops()
+        getShops()
     }
 
     private fun getShops() {
