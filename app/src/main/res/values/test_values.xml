@@ -2,4 +2,5 @@
 <resources>
     <string name="shopname_test">店着コード</string>
     <string name="address1_test">福岡県福岡市</string>
+    <string name="postal_code">815－0035</string>
 </resources>

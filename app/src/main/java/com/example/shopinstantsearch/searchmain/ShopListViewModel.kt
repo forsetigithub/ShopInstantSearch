@@ -20,6 +20,7 @@ class ShopListViewModel @ViewModelInject constructor (
             shopRepository.performSearch(param)
     }
 
+    //TODO 初回データ取り込み時にProgressBarが表示されない問題あり
     val shops: LiveData<List<ShopInfo>> by lazy {
         shopRepository.getAllShop()
     }

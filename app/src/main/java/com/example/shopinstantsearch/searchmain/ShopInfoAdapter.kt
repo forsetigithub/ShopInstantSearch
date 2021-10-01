@@ -44,6 +44,13 @@ class ShopListAdapter: ListAdapter<ShopInfo, ShopListAdapter.ViewHolder>(ShopLis
 
         holder.arrivalCode.text = item.shopCode
 
+        sb.append(item.postalCode.substring(0,3))
+        sb.append("-")
+        sb.append(item.postalCode.substring(3))
+
+        holder.postalCode.text = sb.toString()
+
+        sb.clear()
         sb.append(item.address1)
         sb.append("　")
         sb.append(item.address2)
@@ -53,6 +60,7 @@ class ShopListAdapter: ListAdapter<ShopInfo, ShopListAdapter.ViewHolder>(ShopLis
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val arrivalCode: TextView = itemView.findViewById(R.id.arrival_code)
+        val postalCode: TextView = itemView.findViewById(R.id.postal_code)
         val address1: TextView = itemView.findViewById(R.id.address1)
     }
 

@@ -19,5 +19,8 @@ data class ShopInfo (
 
     @ColumnInfo(name = "address2")
     var address2: String = "",
+
+    @ColumnInfo(name = "postal_code")
+    var postalCode: String = "",
 )
 
