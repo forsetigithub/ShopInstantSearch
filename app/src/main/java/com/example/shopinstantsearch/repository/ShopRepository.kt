@@ -22,8 +22,8 @@ class ShopRepository @Inject constructor (private val shopDao: ShopDatabaseDao) 
         }
     }
 
-    fun getAllShop() : LiveData<List<ShopInfo>> {
-        return shopDao.getAllShops()
+     fun getAllShop() : LiveData<List<ShopInfo>> {
+          return shopDao.getAllShops()
     }
 
     override fun performSearch(query: String) : LiveData<List<ShopInfo>> {

@@ -2,10 +2,12 @@ package com.example.shopinstantsearch.searchmain
 
 
 import android.util.Log
+import android.view.View
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.*
 import com.example.shopinstantsearch.data.ShopInfo
 import com.example.shopinstantsearch.repository.ShopRepository
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 
 class ShopListViewModel @ViewModelInject constructor (
@@ -20,10 +22,15 @@ class ShopListViewModel @ViewModelInject constructor (
             shopRepository.performSearch(param)
     }
 
-    //TODO 初回データ取り込み時にProgressBarが表示されない問題あり
-    val shops: LiveData<List<ShopInfo>> by lazy {
-        shopRepository.getAllShop()
+    private val shops = shopRepository.getAllShop()
+
+    val isEmptyShops = shops.map {
+        if (it.isNullOrEmpty()) View.VISIBLE else View.GONE
     }
+
+//    fun getAllShops():LiveData<List<ShopInfo>> {
+//        return shops
+//    }
 
     fun getShopList(query: String) {
         shopFilterQuery.value = query
@@ -36,7 +43,8 @@ class ShopListViewModel @ViewModelInject constructor (
     private fun getShops() {
         viewModelScope.launch {
             try {
-                shopRepository.refreshShops()
+                val deferred1 =  async { shopRepository.refreshShops() }
+                deferred1.await()
 
             }catch (e: Exception) {
                 Log.e("ShopListViewModel",e.stackTraceToString())
