@@ -1,6 +1,5 @@
 package com.example.shopinstantsearch.searchmain
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -66,8 +65,7 @@ class ShopListAdapter: ListAdapter<ShopInfo, ShopListAdapter.ViewHolder>(ShopLis
 
 }
 
-@BindingAdapter("shops")
-fun hideProgressBar(view: View, shops: Any?) {
-    view.visibility = if (shops != null) View.GONE else View.VISIBLE
-
+@BindingAdapter("isShopEmpty")
+fun hideProgressBar(view: View, _isShopEmpty: Int) {
+    view.visibility = _isShopEmpty
 }
